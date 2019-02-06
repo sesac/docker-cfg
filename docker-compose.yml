@@ -19,7 +19,7 @@ services:
       - '8500:8500'
       - '8600:8600/tcp'
       - '8600:8600/udp'
-  registry_sidecar:
+  api_sidecar:
     image: microhq/micro:latest
     command: --api_handler=proxy
              --api_namespace=go.micro.srv
@@ -34,7 +34,7 @@ services:
     network_mode: 'host'
     ports:
       - '8181:8181'
-  micro_rpc_sidecar:
+  registry_sidecar:
     image: microhq/micro:latest
     command: --proxy_address=0.0.0.0:8081
              --registry_address=127.0.0.1:8500
