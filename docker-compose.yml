@@ -1,8 +1,8 @@
 version: '3'
 
 services:
-  consul_client:
-    image: consul:1.4.0
+  consul_agent:
+    image: consul:1.5.2
     environment:
       CONSUL_LOCAL_CONFIG: '{"leave_on_terminate": true}'
     command: agent -bind=${HOST_IP}
@@ -19,7 +19,7 @@ services:
       - '8500:8500'
       - '8600:8600/tcp'
       - '8600:8600/udp'
-  api_sidecar:
+  proxy_sidecar:
     image: microhq/micro:latest
     command: --api_handler=proxy
              --api_namespace=go.micro.srv
@@ -30,20 +30,7 @@ services:
              --registry=consul
              --enable_stats api
     depends_on:
-      - consul_client
+      - consul_agent
     network_mode: 'host'
     ports:
       - '8181:8181'
-  registry_sidecar:
-    image: microhq/micro:latest
-    command: --proxy_address=0.0.0.0:8081
-             --registry_address=127.0.0.1:8500
-             --register_interval=5
-             --register_ttl=10
-             --registry=consul
-             --enable_stats proxy
-    depends_on:
-      - consul_client
-    network_mode: 'host'
-    ports:
-      - '8081:8081'
