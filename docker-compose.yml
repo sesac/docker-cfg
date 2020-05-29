@@ -20,7 +20,7 @@ services:
       - '8600:8600/tcp'
       - '8600:8600/udp'
   proxy_sidecar:
-    image: micro/micro:latest
+    image: micro/micro:v1.13.2
     command: --api_handler=proxy
              --api_namespace=go.micro.srv
              --api_address=0.0.0.0:8181
